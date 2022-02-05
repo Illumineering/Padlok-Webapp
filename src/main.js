@@ -5,7 +5,6 @@ import App from './App.vue'
 import './assets/tailwind.css'
 
 const i18n = createI18n({
-    locale: 'ja',
     fallbackLocale: 'en',
     messages: translations,
 })

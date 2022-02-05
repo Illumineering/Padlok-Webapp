@@ -1,7 +1,55 @@
-# Vue 3 + Vite
+# Padlok Share WebApp
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+This webapp is about getting & uncrypt client-side the informations shared by another user.
 
-## Recommended IDE Setup
+Identifier & passphrase will be in url, like:
 
-- [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar)
+```
+https://share.padlok.app/<identifier>/<passphrase>
+```
+
+And locale may be forced:
+
+```
+https://share.padlok.app/<locale>/<identifier>/<passphrase>
+```
+
+## Install, Serve & Build
+
+First, we need to install dependencies:
+```
+$ npm install
+```
+
+Then we can either serve for development, or build for production:
+```
+$ npm run dev # Development
+$ npm run build # Production
+```
+
+## How does it work?
+
+The webapp first load the identifier & the passphrase from the URL.
+
+Then, it gets the encrypted data from the [Padlok API](https://github.com/Dean151/Padlok-API) using the share endpoint:
+
+```
+GET https://api.padlok.app/shared/<identifier>
+```
+
+The data fetched will be of the following form:
+
+```
+{
+    "key": "<base64encoded>",
+    "sealed": "<base64encoded">
+}
+```
+
+The key should be derived using HKDF<SHA256> expansion algorithm, with the above key as "info", and the passphrase from the URL as the pseudoRandomKey.
+
+The resulting key will be able to decrypt the sealed data using ChaChaPoly algorithm.
+
+The sealed data is composed by appending the following data: `sealed = nonce + ciphertext + tag`.
+
+Since tag is 16 bytes long, and so is nonce, we can easily break appart the three infos in order to decrypt back the underlying data.
