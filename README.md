@@ -41,15 +41,16 @@ The data fetched will be of the following form:
 
 ```
 {
-    "key": "<base64encoded>",
+    "iterations": 1000,
+    "salt": "<base64encoded>",
     "sealed": "<base64encoded>"
 }
 ```
 
-The key should be derived using HKDF<SHA256> expansion algorithm, with the above key as "info", and the passphrase from the URL as the pseudoRandomKey.
+The key should be derived using PBKDF2<SHA256> with the above salt and iterations count, and the passphrase from the URL as the initial password data.
 
-The resulting key will be able to decrypt the sealed data using ChaCha20 Poly1305 algorithm.
+The resulting key will be able to decrypt the sealed data using AES-GCM algorithm, with PKCS7 padding mode.
 
-The sealed data is composed by appending the following data: `sealed = nonce + ciphertext + tag`.
+The sealed data is composed by appending the following data: `sealed = nonce + ciphertext`.
 
-Since tag is 16 bytes long, and the nonce is 12 bytes long, so we can easily break appart the three infos in order to decrypt back the underlying data.
+Since the nonce is 16 bytes long, we can easily break appart the three infos in order to decrypt back the underlying data.
