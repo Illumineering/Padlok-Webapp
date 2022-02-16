@@ -1,3 +1,12 @@
+@font-face {
+    font-family: 'HKGrotesk-Black';
+    src: url('https://padlok.app/css/fonts/HKGrotesk-Black.otf') format('opentype');
+}
+@font-face {
+    font-family: 'HKGrotesk-SemiBold';
+    src: url('https://padlok.app/css/fonts/HKGrotesk-SemiBold.otf') format('opentype');
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

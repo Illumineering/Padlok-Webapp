@@ -1,8 +1,11 @@
 <script setup>
+import Footer from './components/Footer.vue'
+import Header from './components/Header.vue'
+import Loading from './components/Loading.vue'
+import NotFound from './components/NotFound.vue'
 import { ref, computed } from 'vue'
 
-const identifier = '5OPWDzrVi3eUmLwp2lycUf' // TODO: get it from URL
-const passphrase = 'BYhngAXAZ5o0' // TODO: get it from URL
+const api = 'https://dev.padlok.app' // TODO: use https://api.padlok.app
 
 // Main data
 const data = ref({ loading: true })
@@ -16,75 +19,81 @@ let catcher = function (reason) {
   data.value = { error: true, reason: reason.toString() }
 }
 
-// Perform the fetch
-fetch('https://dev.padlok.app/shared/' + identifier)
+const components = window.location.pathname.split('/').filter((el) => el !== "")
+if (components.length !== 2) {
+  catcher('Wrong route')
+} else {
+  const [identifier, passphrase] = components
+  // Perform the fetch
+  fetch(api + '/shared/' + identifier)
   .then(function (res) {
-    res.json()
+      res.json()
       .then(function(json) {
-        if (json.hasOwnProperty('error')) {
+          if (json.hasOwnProperty('error')) {
           catcher(json.reason)
           return
-        }
-        let salt = Uint8Array.from(atob(json.salt), c => c.charCodeAt(0))
-        let sealed = Uint8Array.from(atob(json.sealed), c => c.charCodeAt(0))
-        let iterations = json.iterations
-        if (!salt || !sealed || !iterations) {
+          }
+          let salt = Uint8Array.from(atob(json.salt), c => c.charCodeAt(0))
+          let sealed = Uint8Array.from(atob(json.sealed), c => c.charCodeAt(0))
+          let iterations = json.iterations
+          if (!salt || !sealed || !iterations) {
           catcher('Could not decode base64 for salt or sealed')
           return
-        }
-        let nonce = sealed.slice(0, 16)
-        let ciphertext = sealed.slice(16)
+          }
+          let nonce = sealed.slice(0, 16)
+          let ciphertext = sealed.slice(16)
 
-        let enc = new TextEncoder();
-        crypto.subtle.importKey("raw", enc.encode(passphrase), "PBKDF2", false, ["deriveBits", "deriveKey"])
+          let enc = new TextEncoder();
+          crypto.subtle.importKey("raw", enc.encode(passphrase), "PBKDF2", false, ["deriveBits", "deriveKey"])
           .then(function (keyMaterial) {
-            let keyInfos = {
+              let keyInfos = {
               "name": "PBKDF2",
               "salt": salt,
               "iterations": iterations,
               "hash": "SHA-256"
-            }
-            let keyOutput = {
+              }
+              let keyOutput = {
               "name": "AES-GCM",
               "length": 256
-            }
-            crypto.subtle.deriveKey(keyInfos, keyMaterial, keyOutput, true, ["encrypt", "decrypt"])
+              }
+              crypto.subtle.deriveKey(keyInfos, keyMaterial, keyOutput, true, ["encrypt", "decrypt"])
               .then(function (key) {
-                let aes = {
+                  let aes = {
                   "name": "AES-GCM",
                   "iv": nonce
-                }
-                crypto.subtle.decrypt(aes, key, ciphertext)
+                  }
+                  crypto.subtle.decrypt(aes, key, ciphertext)
                   .then(function (decrypted) {
-                    let decoder = new TextDecoder()
-                    do {
+                      let decoder = new TextDecoder()
+                      do {
                       // Try to jsonify. If it doesn't, remove last character and try again
                       try {
-                        data.value = JSON.parse(decoder.decode(decrypted))
-                        break
+                          data.value = JSON.parse(decoder.decode(decrypted))
+                          break
                       } catch {
-                        decrypted = decrypted.slice(0, decrypted.byteLength - 1)
+                          decrypted = decrypted.slice(0, decrypted.byteLength - 1)
                       }
-                    } while (decrypted.byteLength)
+                      } while (decrypted.byteLength)
                   }).catch(catcher)
               }).catch(catcher)
           }).catch(catcher)
       }).catch(catcher)
   }).catch(catcher)
+}
 </script>
 
 <template>
+  <Header></Header>
+  <main class="container mx-auto px-8 my-6 grow prose">
   <div v-if="loading">
-    Loading…
+    <loading></loading>
   </div>
   <div v-else-if="notFound">
-    Not Found
+    <not-found></not-found>
   </div>
   <div v-else>
     Loaded!
   </div>
+  </main>
+  <Footer></Footer>
 </template>
-
-<style>
-
-</style>

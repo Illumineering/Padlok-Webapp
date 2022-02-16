@@ -1,10 +1,11 @@
 import { createApp } from 'vue'
 import { createI18n } from 'vue-i18n'
-import { translations } from './translations.js'
+import { translations, detectLanguage } from './translations.js'
 import App from './App.vue'
 import './assets/tailwind.css'
 
 const i18n = createI18n({
+    locale: detectLanguage() || 'en',
     fallbackLocale: 'en',
     messages: translations,
 })
