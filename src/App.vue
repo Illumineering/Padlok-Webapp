@@ -16,7 +16,9 @@ const notFound = computed(() => data.value.hasOwnProperty('error'))
 
 let catcher = function (reason) {
   console.error(reason);
-  data.value = { error: true, reason: reason.toString() }
+  setTimeout(function () {
+    data.value = { error: true, reason: reason.toString() }
+  }, 1000)
 }
 
 const components = window.location.pathname.split('/').filter((el) => el !== "")

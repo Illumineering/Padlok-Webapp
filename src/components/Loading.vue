@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col justify-center items-center absolute w-full h-full -mx-8">
         <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-        <em class="my-0">{{ $t('message.loading') }}</em>
+        <em class="my-0">{{ $t('loading') }}</em>
     </div>
 </template>
 

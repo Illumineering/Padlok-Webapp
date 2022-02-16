@@ -15,9 +15,12 @@ export const translations = {
             support: 'Support',
             terms: 'Terms of service'
         },
-        message: {
-            loading: 'Loading…',
-            not_found: 'Not found!',
+        loading: 'Loading…',
+        not_found: {
+            title: 'Not found!',
+            explain: 'The informations could not be found.',
+            details: 'The link is either incorrect, or have been deleted by the sender.',
+            tip: 'You may request your sender a new valid link.'
         },
         url: {
             marketing: 'https://padlok.app',
@@ -36,9 +39,12 @@ export const translations = {
             support: 'Assistance',
             terms: 'Conditions d’utilisation'
         },
-        message: {
-            loading: 'Chargement…',
-            not_found: 'Introuvable !',
+        loading: 'Chargement…',
+        not_found: {
+            title: 'Introuvable !',
+            explain: 'Les informations n’ont pas été trouvées.',
+            details: 'Le lien est peut-être incorrect, ou a été supprimé par l’expéditeur.',
+            tip: 'Vous pouvez demander à l’expéditeur un nouveau lien valide.'
         },
         url: {
             marketing: 'https://padlok.app/fr',
