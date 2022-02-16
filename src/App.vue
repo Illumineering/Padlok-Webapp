@@ -1,4 +1,5 @@
 <script setup>
+import Address from './components/Address.vue'
 import Footer from './components/Footer.vue'
 import Header from './components/Header.vue'
 import Loading from './components/Loading.vue'
@@ -15,7 +16,6 @@ const loading = computed(() => data.value.hasOwnProperty('loading'))
 const notFound = computed(() => data.value.hasOwnProperty('error'))
 
 let catcher = function (reason) {
-  console.error(reason);
   setTimeout(function () {
     data.value = { error: true, reason: reason.toString() }
   }, 1000)
@@ -94,7 +94,7 @@ if (components.length !== 2) {
     <NotFound></NotFound>
   </template>
   <template v-else>
-    Loaded!
+    <Address :data="data"></Address>
   </template>
   </main>
   <Footer></Footer>

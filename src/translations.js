@@ -1,11 +1,22 @@
 export const detectLanguage = function () {
     let language = (navigator.language || navigator.userLanguage).split('-')[0]
-    let available = ['en', 'fr']
+    let available = ['en', 'fr'] // When adding value here, add the correct import in Address.vue
     return available.includes(language) ? language : 'en'
 }
 
 export const translations = {
     en: {
+        address: {
+            building: 'Building',
+            floor: 'Floor',
+            intercom: 'Intercom',
+            label: {
+                door: 'Door',
+                gate: 'Gate',
+                portal: 'Portal'
+            },
+            staircase: 'Staircase'
+        },
         alternative: {
             appstore: 'Download on the App Store'
         },
@@ -30,6 +41,17 @@ export const translations = {
         }
     },
     fr: {
+        address: {
+            building: 'Bâtiment',
+            floor: 'Étage',
+            intercom: 'Interphone',
+            label: {
+                door: 'Porte',
+                gate: 'Grille',
+                portal: 'Portail'
+            },
+            staircase: 'Escalier'
+        },
         alternative: {
             appstore: 'Télécharger dans l’App Store'
         },
