@@ -20,7 +20,6 @@ export const translations = {
             not_found: 'Not found!',
         },
         url: {
-            appstore: 'https://apps.apple.com/us/app/padlok/id1546719801',
             marketing: 'https://padlok.app',
             privacy: 'https://padlok.app/privacy/',
             support: 'https://padlok.app/support/',
@@ -42,7 +41,6 @@ export const translations = {
             not_found: 'Introuvable !',
         },
         url: {
-            appstore: 'https://apps.apple.com/fr/app/padlok/id1546719801',
             marketing: 'https://padlok.app/fr',
             privacy: 'https://padlok.app/fr/confidentialite/',
             support: 'https://padlok.app/fr/assistance/',
