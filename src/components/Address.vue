@@ -1,13 +1,14 @@
 <script setup>
-import { useI18n } from 'vue-i18n'
-const { locale } = useI18n({ useScope: 'global' })
+import Code from './Code.vue'
+
+// Numeral & i18n for localized floor ordinal formatting
 import numeral from 'numeral'
 // All supported locales must be imported
 import "numeral/locales/fr";
+import { useI18n } from 'vue-i18n'
+const { locale } = useI18n({ useScope: 'global' })
 numeral.locale(locale.value)
 
-import { computed } from 'vue'
-import Code from './Code.vue'
 const props = defineProps({
   data: Object
 })
