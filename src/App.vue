@@ -6,7 +6,7 @@ import Loading from './components/Loading.vue'
 import NotFound from './components/NotFound.vue'
 import { ref, computed } from 'vue'
 
-const api = 'https://dev.padlok.app' // TODO: use https://api.padlok.app
+const api = 'https://api.padlok.app'
 
 // Main data
 const data = ref({ loading: true })
