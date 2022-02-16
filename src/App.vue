@@ -84,16 +84,16 @@ if (components.length !== 2) {
 
 <template>
   <Header></Header>
-  <main class="container mx-auto px-8 my-6 grow prose">
-  <div v-if="loading">
-    <loading></loading>
-  </div>
-  <div v-else-if="notFound">
-    <not-found></not-found>
-  </div>
-  <div v-else>
+  <main class="container mx-auto px-8 my-6 grow prose relative">
+  <template v-if="loading">
+    <Loading></Loading>
+  </template>
+  <template v-else-if="notFound">
+    <NotFound></NotFound>
+  </template>
+  <template v-else>
     Loaded!
-  </div>
+  </template>
   </main>
   <Footer></Footer>
 </template>
