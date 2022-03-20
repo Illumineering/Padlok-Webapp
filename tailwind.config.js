@@ -11,10 +11,10 @@ module.exports = {
     },
     extend: {
       colors: {
-        'padlok-blue': '#1F4483',
+        'padlok-blue': '#344C84',
         'padlok-cyan': '#3BBDFF',
         'skintone': {
-          0: '#F6D040',
+          0: '#FCBC37',
           1: '#F5DDC0',
           2: '#DABC9A',
           3: '#B8916F',
