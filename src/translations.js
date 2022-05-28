@@ -31,7 +31,7 @@ export const translations = {
             title: 'Not found!',
             explain: 'The informations could not be found.',
             details: 'The link is either incorrect, or have been deleted by the sender.',
-            tip: 'You may request your sender a new valid link.'
+            tip: 'You may request your sender for a new valid link.'
         },
         url: {
             marketing: 'https://padlok.app',
