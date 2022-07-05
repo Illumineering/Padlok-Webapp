@@ -45,7 +45,7 @@ const props = defineProps({
             <dd>{{ numeral(props.data.floor).format('0o') }}</dd>
         </template>
         <template v-if="data.door">
-            <dt>{{ $t('address.label.door') }}</dt>
+            <dt>{{ $t('address.flat') }}</dt>
             <dd>{{ data.door }}</dd>
         </template>
         <template v-if="data.moreInfos">

@@ -8,6 +8,7 @@ export const translations = {
     en: {
         address: {
             building: 'Building',
+            flat: 'Flat',
             floor: 'Floor',
             intercom: 'Intercom',
             label: {
@@ -43,6 +44,7 @@ export const translations = {
     fr: {
         address: {
             building: 'Bâtiment',
+            flat: 'Appartement',
             floor: 'Étage',
             intercom: 'Interphone',
             label: {
