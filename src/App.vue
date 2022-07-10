@@ -48,7 +48,7 @@ if (components.length !== 2) {
           let enc = new TextEncoder();
           crypto.subtle.importKey("raw", enc.encode(passphrase), "PBKDF2", false, ["deriveBits", "deriveKey"])
           .then(function (keyMaterial) {
-              let keyInfos = {
+              let keyInfo = {
               "name": "PBKDF2",
               "salt": salt,
               "iterations": iterations,
@@ -58,7 +58,7 @@ if (components.length !== 2) {
               "name": "AES-GCM",
               "length": 256
               }
-              crypto.subtle.deriveKey(keyInfos, keyMaterial, keyOutput, true, ["encrypt", "decrypt"])
+              crypto.subtle.deriveKey(keyInfo, keyMaterial, keyOutput, true, ["encrypt", "decrypt"])
               .then(function (key) {
                   let aes = {
                   "name": "AES-GCM",

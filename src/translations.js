@@ -30,7 +30,7 @@ export const translations = {
         loading: 'Loading…',
         not_found: {
             title: 'Not found!',
-            explain: 'The informations could not be found.',
+            explain: 'The information could not be found.',
             details: 'The link is either incorrect, or have been deleted by the sender.',
             tip: 'You may request your sender for a new valid link.'
         },

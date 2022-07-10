@@ -1,6 +1,6 @@
 # Padlok Share WebApp
 
-This webapp is about getting & uncrypt client-side the informations shared by another user.
+This webapp is about getting & uncrypt client-side the information shared by another user.
 
 Identifier & passphrase will be in url, like:
 
@@ -53,4 +53,4 @@ The resulting key will be able to decrypt the sealed data using AES-GCM algorith
 
 The sealed data is composed by appending the following data: `sealed = nonce + ciphertext`.
 
-Since the nonce is 16 bytes long, we can easily break appart the three infos in order to decrypt back the underlying data.
+Since the nonce is 16 bytes long, we can easily break appart the three info in order to decrypt back the underlying data.

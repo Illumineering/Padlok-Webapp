@@ -19,7 +19,7 @@ const props = defineProps({
     <h2 v-if="data.name" class="font-hkgrotesk-semibold mb-0">{{ data.name }}</h2>
     <h4 v-if="data.name && data.address" class="font-hkgrotesk-semibold">{{ data.address }}</h4>
     <h3 v-else-if="data.address" class="font-hkgrotesk-semibold">{{ data.address }}</h3>
-    <!-- Informations -->
+    <!-- Information -->
     <dl>
         <template v-for="(door, index) in data.doors" :key="index">
             <dt v-if="door.label.door">{{ $t('address.label.door') }}</dt>
