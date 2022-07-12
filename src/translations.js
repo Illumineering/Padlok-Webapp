@@ -21,6 +21,10 @@ export const translations = {
         alternative: {
             appstore: 'Download on the App Store'
         },
+        head: {
+            title: 'Padlok, door codes manager',
+            description: 'In front of your friend’s door, looking for the codes? Not anymore! Get all the info with Padlok!'
+        },
         footer: {
             copyright: 'Padlok© by Thomas Durand {year} - All Right Reserved',
             privacy: 'Privacy policy',
@@ -56,6 +60,10 @@ export const translations = {
         },
         alternative: {
             appstore: 'Télécharger dans l’App Store'
+        },
+        head: {
+            title: 'Padlok, le gestionnaire de digicodes',
+            description: 'Face à la porte d’immeuble de vos amis, à la recherche des codes ? Plus jamais ! Obtenez toutes les infos avec Padlok !'
         },
         footer: {
             copyright: 'Padlok© par Thomas Durand {year} - Tous droits réservés',

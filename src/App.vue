@@ -5,6 +5,24 @@ import Header from './components/Header.vue'
 import Loading from './components/Loading.vue'
 import NotFound from './components/NotFound.vue'
 import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useMeta } from 'vue-meta'
+
+const { t } = useI18n({ useScope: 'global' })
+const title = t('head.title')
+const description = t('head.description')
+
+useMeta({
+    title: title,
+    meta: [
+      { itemprop: 'name', content: title },
+      { property: 'og:title', content: title },
+      { itemprop: 'description', content: description },
+      { property: 'og:description', content: description },
+      { name: 'description', content: description },
+      { name: 'twitter:description', content: description },
+    ],
+})
 
 const api = 'https://api.padlok.app'
 
@@ -85,6 +103,9 @@ if (components.length !== 2) {
 </script>
 
 <template>
+  <metainfo>
+      <template v-slot:title="{ content }">{{ content }}</template>
+  </metainfo>
   <Header></Header>
   <main class="container mx-auto px-8 my-6 grow prose relative">
   <template v-if="loading">
