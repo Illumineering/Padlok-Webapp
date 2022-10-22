@@ -18,8 +18,11 @@ export const translations = {
             },
             staircase: 'Staircase'
         },
-        alternative: {
-            appstore: 'Download on the App Store'
+        appstore: {
+            alternative: 'Download on the App Store',
+            darkImage: '/images/en/appstore-dark.svg',
+            lightImage: '/images/en/appstore-light.svg',
+            url: 'https://apps.apple.com/us/app/padlok/id1546719801'
         },
         head: {
             title: 'Padlok, door codes manager',
@@ -58,8 +61,11 @@ export const translations = {
             },
             staircase: 'Escalier'
         },
-        alternative: {
-            appstore: 'Télécharger dans l’App Store'
+        appstore: {
+            alternative: 'Télécharger dans l’App Store',
+            darkImage: '/images/fr/appstore-dark.svg',
+            lightImage: '/images/fr/appstore-light.svg',
+            url: 'https://apps.apple.com/fr/app/padlok/id1546719801'
         },
         head: {
             title: 'Padlok, le gestionnaire de digicodes',

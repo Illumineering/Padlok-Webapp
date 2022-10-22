@@ -3,7 +3,7 @@
     <div class="container px-safe mx-auto flex flex-col space-y-6">
       <div class="flex px-2 justify-between items-center">
         <a :href="$t('url.marketing')" target="_blank">
-          <img src="https://padlok.app/images/appicon.svg" alt="Padlok AppIcon" class="w-16 sm:w-20">
+          <img src="/images/appicon.svg" alt="Padlok AppIcon" class="w-16 sm:w-20">
         </a>
         <ul class="text-xs sm:text-sm flex flex-col items-end text-right space-y-1">
           <li><a :href="$t('url.terms')" target="_blank" class="opacity-80 hover:opacity-100 hover:underline">{{ $t('footer.terms') }}</a></li>
