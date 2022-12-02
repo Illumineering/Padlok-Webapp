@@ -32,7 +32,7 @@ const data = ref({ loading: true, address: null, error: false, reason: null })
 // Computed properties
 const loading = computed(() => data.value.loading)
 const notFound = computed(() => data.value.error)
-const address = computed(() => data.value.address)
+const resolved = computed(() => data.value.address)
 
 const catcher = function (reason) {
   setTimeout(function () {
@@ -101,7 +101,7 @@ if (!identifier || !passphrase) {
                       do {
                         // Try to jsonify. If it doesn't, remove last character and try again
                         try {
-                          data.value.data = JSON.parse(decoder.decode(decrypted))
+                          data.value = { loading: false, address: JSON.parse(decoder.decode(decrypted)), error: false, reason: null }
                           break
                         } catch {
                           decrypted = decrypted.slice(0, decrypted.byteLength - 1)
@@ -128,7 +128,7 @@ if (!identifier || !passphrase) {
       <NotFoundMessage></NotFoundMessage>
     </template>
     <template v-else>
-      <AddressView :address="address"></AddressView>
+      <AddressView :address="resolved"></AddressView>
     </template>
   </main>
   <FooterView></FooterView>
