@@ -5,13 +5,12 @@ This webapp is about getting & uncrypt client-side the information shared by ano
 Identifier & passphrase will be in url, like:
 
 ```
+https://share.padlok.app/<identifier>#<passphrase>
+```
+
+Legacy urls:
+```
 https://share.padlok.app/<identifier>/<passphrase>
-```
-
-And locale may be forced:
-
-```
-https://share.padlok.app/<locale>/<identifier>/<passphrase>
 ```
 
 ## Install, Serve & Build

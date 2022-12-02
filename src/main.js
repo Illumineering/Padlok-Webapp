@@ -6,15 +6,15 @@ import App from './App.vue'
 import './assets/tailwind.css'
 
 const i18n = createI18n({
-    legacy: false,
-    locale: detectLanguage() || 'en',
-    fallbackLocale: 'en',
-    messages: translations,
+  legacy: false,
+  locale: detectLanguage() || 'en',
+  fallbackLocale: 'en',
+  messages: translations
 })
 const metaManager = createMetaManager(false, {
-    ...defaultConfig,
-    meta: { tag: 'meta', nameless: true },
-});
+  ...defaultConfig,
+  meta: { tag: 'meta', nameless: true }
+})
 const app = createApp(App)
 app.use(i18n)
 app.use(metaManager)

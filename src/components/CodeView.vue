@@ -17,6 +17,6 @@ const characters = computed(() => props.code.split(''))
 
 <style scoped>
 span {
-    @apply font-mono
+  @apply font-mono
 }
 </style>
