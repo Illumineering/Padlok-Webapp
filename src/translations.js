@@ -25,8 +25,8 @@ export const translations = {
       url: 'https://apps.apple.com/us/app/padlok/id1546719801'
     },
     head: {
-      title: 'Padlok, door codes manager',
-      description: 'In front of your friend’s door, looking for the codes? Not anymore! Get all the info with Padlok!'
+      title: 'Some codes have been shared with you!',
+      description: 'Padlok, door code manager'
     },
     footer: {
       copyright: 'Padlok© by Thomas Durand {year} - All Right Reserved',
@@ -68,8 +68,8 @@ export const translations = {
       url: 'https://apps.apple.com/fr/app/padlok/id1546719801'
     },
     head: {
-      title: 'Padlok, le gestionnaire de digicodes',
-      description: 'Face à la porte d’immeuble de vos amis, à la recherche des codes ? Plus jamais ! Obtenez toutes les infos avec Padlok !'
+      title: 'Des digicodes ont été partagés avec vous !',
+      description: 'Padlok, le gestionnaire de digicodes'
     },
     footer: {
       copyright: 'Padlok© par Thomas Durand {year} - Tous droits réservés',
