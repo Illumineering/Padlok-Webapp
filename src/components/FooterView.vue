@@ -1,17 +1,30 @@
 <template>
-  <footer class="bg-sky-50 py-5">
-    <div class="container px-safe mx-auto flex flex-col space-y-6">
-      <div class="flex px-2 justify-between items-center">
+  <footer>
+  <div class="centered-container flex flex-col space-y-6">
+    <div class="flex px-2 justify-between items-center">
+      <div class="flex flex-col sm:flex-row items-center space-y-4 sm:space-x-4">
         <a :href="$t('url.marketing')" target="_blank">
           <img src="/images/appicon.svg" alt="Padlok AppIcon" class="w-16 sm:w-20">
         </a>
-        <ul class="text-xs sm:text-sm flex flex-col items-end text-right space-y-1">
-          <li><a :href="$t('url.terms')" target="_blank" class="opacity-80 hover:opacity-100 hover:underline">{{ $t('footer.terms') }}</a></li>
-          <li><a :href="$t('url.privacy')" target="_blank" class="opacity-80 hover:opacity-100 hover:underline">{{ $t('footer.privacy') }}</a></li>
-          <li><a :href="$t('url.support')" target="_blank" class="opacity-80 hover:opacity-100 hover:underline">{{ $t('footer.support') }}</a></li>
+        
+        <ul class="store-links">
+          <li><a :href="$t('appstore.url')" rel="external" target="_blank">{{ $t('appstore.alternative') }}</a></li>
+          <li><a rel="external" target="_blank">{{ $t('playstore.soon') }}</a></li>
         </ul>
       </div>
-      <span class="text-xs sm:text-sm text-center text-gray-500">{{ $t('footer.copyright', { year: (new Date()).getFullYear() }) }}</span>
+    
+      <ul class="relative-links">
+          <li><a :href="$t('url.terms')" target="_blank">{{ $t('footer.terms') }}</a></li>
+          <li><a :href="$t('url.privacy')" target="_blank">{{ $t('footer.privacy') }}</a></li>
+          <li><a :href="$t('url.support')" target="_blank">{{ $t('footer.support') }}</a></li>
+      </ul>
     </div>
-  </footer>
+
+    <span class="copyright">
+      Padlok© 
+      <a href="https://illumineering.org">{{ $t('footer.copyright.by', { trademark: 'Illumineering®'}) }}</a> 
+      {{ (new Date()).getFullYear() }} - {{ $t('footer.copyright.reserved') }}
+    </span>
+  </div>
+</footer>
 </template>

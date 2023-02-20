@@ -10,3 +10,84 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Re-usable */
+
+.centered-container {
+    @apply container px-safe mx-auto;
+}
+
+/* device.js */
+
+.visible-android {
+    @apply hidden;
+}
+.visible-ios {
+    @apply hidden;
+}
+.on-device .visible-ios, .on-device .visible-android {
+    display: inherit;
+}
+.device-ios .visible-android {
+    display:none !important;
+}
+.device-ios .hidden-ios {
+    display:none !important;
+}
+.device-android .hidden-android {
+    display:none !important;
+}
+.device-android .visible-ios {
+    display:none !important;
+}
+
+/* Site header */
+
+header {
+    @apply z-50 sticky top-0 bg-padlok-blue text-white overflow-hidden h-16 print:text-black print:bg-transparent;
+}
+header > div {
+    @apply centered-container flex justify-between items-center h-16;
+}
+header .logo {
+    @apply mx-2 sm:mx-0 scale-90 sm:scale-100;
+}
+header ul.store-links {
+    @apply px-2 sm:px-4 space-x-2 print:invisible flex;
+}
+header ul.store-links li {
+    @apply hidden md:inline-block scale-90 sm:scale-100;
+}
+.on-device header ul.store-links li {
+    @apply inline-block;
+}
+
+/* Site footer */
+
+footer {
+    @apply bg-sky-50 py-5 print:hidden;
+}
+footer span.copyright {
+    @apply text-xs sm:text-sm text-center text-gray-500;
+}
+footer ul.store-links {
+    @apply text-xs sm:text-sm flex flex-col items-center sm:items-start text-left space-y-1;
+}
+footer ul.store-links li a {
+    @apply opacity-80;
+}
+footer ul.store-links li a[href] {
+    @apply hover:opacity-100 hover:underline;
+}
+footer ul.relative-links {
+    @apply text-xs sm:text-sm flex flex-col items-end text-right space-y-1;
+}
+footer ul.relative-links li a {
+    @apply opacity-80;
+}
+footer ul.relative-links li a[href] {
+    @apply hover:opacity-100 hover:underline;
+}
+footer ul.social-media a svg, footer ul.social-media a img {
+    @apply m-0 w-4 h-4 sm:w-6 sm:h-6;
+}
