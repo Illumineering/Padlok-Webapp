@@ -4,7 +4,7 @@
     <div class="flex px-2 justify-between items-center">
       <div class="flex flex-col sm:flex-row items-center space-y-4 sm:space-x-4">
         <a :href="$t('url.marketing')" target="_blank">
-          <img src="/images/appicon.svg" alt="Padlok AppIcon" class="w-16 sm:w-20">
+          <img class="icon" src="/images/appicon.svg" alt="Padlok AppIcon">
         </a>
         
         <ul class="store-links">
