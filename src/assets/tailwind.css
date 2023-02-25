@@ -49,6 +49,9 @@ header {
 header > div {
     @apply centered-container flex justify-between items-center h-16;
 }
+header img {
+    @apply select-none;
+}
 header .logo {
     @apply mx-2 sm:mx-0 scale-90 sm:scale-100;
 }
@@ -89,5 +92,8 @@ footer ul.relative-links li a[href] {
     @apply hover:opacity-100 hover:underline;
 }
 footer ul.social-media a svg, footer ul.social-media a img {
-    @apply m-0 w-4 h-4 sm:w-6 sm:h-6;
+    @apply m-0 w-4 h-4 sm:w-6 sm:h-6 select-none;
+}
+footer img.icon {
+    @apply w-16 sm:w-24 rounded-2xl sm:rounded-3xl select-none;
 }
