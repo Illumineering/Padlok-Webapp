@@ -12,7 +12,7 @@
           <li><a rel="external" target="_blank">{{ $t('playstore.soon') }}</a></li>
         </ul>
       </div>
-    
+
       <ul class="relative-links">
           <li><a :href="$t('url.terms')" target="_blank">{{ $t('footer.terms') }}</a></li>
           <li><a :href="$t('url.privacy')" target="_blank">{{ $t('footer.privacy') }}</a></li>
@@ -21,7 +21,7 @@
     </div>
 
     <span class="copyright">
-      Padlok© 
+      <a href="$t('url.marketing')">Padlok©</a> 
       <a href="https://illumineering.org">{{ $t('footer.copyright.by', { trademark: 'Illumineering®'}) }}</a> 
       {{ (new Date()).getFullYear() }} - {{ $t('footer.copyright.reserved') }}
     </span>
