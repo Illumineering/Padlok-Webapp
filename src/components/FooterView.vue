@@ -22,7 +22,7 @@
 
     <span class="copyright">
       <a href="$t('url.marketing')">Padlok©</a> 
-      <a href="https://illumineering.org">{{ $t('footer.copyright.by', { trademark: 'Illumineering®'}) }}</a> 
+      <a href="https://illumineering.fr">{{ $t('footer.copyright.by', { trademark: 'Illumineering®'}) }}</a> 
       {{ (new Date()).getFullYear() }} - {{ $t('footer.copyright.reserved') }}
     </span>
   </div>
