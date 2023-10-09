@@ -16,7 +16,7 @@
     "@tailwindcss/typography": "^0.5.4",
     "@vitejs/plugin-vue": "^4.0.0",
     "autoprefixer": "^10.4.2",
-    "eslint": "^8.28.0",
+    "eslint": "^8.51.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-n": "^16.0.0",
