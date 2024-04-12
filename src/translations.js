@@ -27,7 +27,7 @@ export const translations = {
     footer: {
       copyright: {
         by: 'by {trademark}',
-        reserved: 'All Right Reserved',
+        reserved: 'All Right Reserved'
       },
       privacy: 'Privacy policy',
       support: 'Support',
@@ -50,7 +50,7 @@ export const translations = {
       lightImage: '/images/en/playstore-light.svg',
       darkSoonImage: '/images/en/playstore-soon-dark.svg',
       lightSoonImage: '/images/en/playstore-soon-light.svg',
-      soon: 'Soon on Google Play',
+      soon: 'Soon on Google Play'
     },
     url: {
       marketing: 'https://padlok.app',
@@ -81,7 +81,7 @@ export const translations = {
     footer: {
       copyright: {
         by: 'par {trademark}',
-        reserved: 'Tous droits réservés',
+        reserved: 'Tous droits réservés'
       },
       privacy: 'Politique de confidentialité',
       support: 'Assistance',
@@ -104,7 +104,7 @@ export const translations = {
       lightImage: '/images/fr/playstore-light.svg',
       darkSoonImage: '/images/fr/playstore-soon-dark.svg',
       lightSoonImage: '/images/fr/playstore-soon-light.svg',
-      soon: 'Bientôt sur Google Play',
+      soon: 'Bientôt sur Google Play'
     },
     url: {
       marketing: 'https://padlok.app/fr',
