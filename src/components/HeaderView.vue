@@ -21,8 +21,8 @@ if (html.classList) html.classList.add.apply(html.classList, classNames);
                 </a>
             </li>
             <li class="hidden-ios">
-                <a target="_blank">
-                    <img :src="$t('playstore.lightSoonImage')" :alt="$t('playstore.soon')">
+                <a :href="$t('url.marketing') + '#android'" rel="external" target="_blank">
+                    <img :src="$t('playstore.lightImage')" :alt="$t('playstore.alternative')">
                 </a>
             </li>
         </ul>

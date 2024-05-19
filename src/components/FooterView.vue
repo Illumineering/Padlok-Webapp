@@ -9,7 +9,7 @@
         
         <ul class="store-links">
           <li><a :href="$t('appstore.url')" rel="external" target="_blank">{{ $t('appstore.alternative') }}</a></li>
-          <li><a rel="external" target="_blank">{{ $t('playstore.soon') }}</a></li>
+          <li><a :href="$t('url.marketing') + '#android'" rel="external" target="_blank">{{ $t('playstore.alternative') }}</a></li>
         </ul>
       </div>
 
