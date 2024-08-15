@@ -14,7 +14,8 @@ export const translations = {
       label: {
         door: 'Door',
         gate: 'Gate',
-        portal: 'Portal'
+        portal: 'Portal',
+        padlock: 'Padlock'
       },
       staircase: 'Staircase'
     },
@@ -68,7 +69,8 @@ export const translations = {
       label: {
         door: 'Porte',
         gate: 'Grille',
-        portal: 'Portail'
+        portal: 'Portail',
+        padlock: 'Cadenas'
       },
       staircase: 'Escalier'
     },

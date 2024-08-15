@@ -26,6 +26,7 @@ const props = defineProps({
       <dt v-if="door.label.door">{{ $t('address.label.door') }}</dt>
       <dt v-if="door.label.gate">{{ $t('address.label.gate') }}</dt>
       <dt v-if="door.label.portal">{{ $t('address.label.portal') }}</dt>
+      <dt v-if="door.label.padlock">{{ $t('address.label.padlock') }}</dt>
       <dt v-if="door.label.custom">{{ door.label.custom.string }}</dt>
       <dd><CodeView :code="door.code"></CodeView></dd>
     </template>
