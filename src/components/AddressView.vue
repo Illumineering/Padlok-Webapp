@@ -55,25 +55,3 @@ const props = defineProps({
     </template>
   </dl>
 </template>
-
-<style scoped>
-dl {
-  @apply overflow-visible flex flex-row flex-wrap
-}
-
-dl dt, dl dd {
-  @apply overflow-hidden text-ellipsis grow-0 shrink-0 pb-3 mb-3 border-b-2
-}
-
-dl dt {
-  @apply font-medium text-gray-500 basis-1/3
-}
-
-dl dd {
-  @apply text-right ml-auto basis-2/3
-}
-
-dl dd.full-width {
-  @apply basis-full text-center border-0
-}
-</style>

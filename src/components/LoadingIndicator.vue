@@ -19,7 +19,6 @@
   height: 13px;
   border-radius: 50%;
   animation-timing-function: cubic-bezier(0, 1, 1, 0);
-  @apply bg-padlok-cyan;
 }
 .lds-ellipsis div:nth-child(1) {
   left: 8px;

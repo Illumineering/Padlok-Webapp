@@ -1,15 +1,56 @@
-@font-face {
-    font-family: 'HKGrotesk-Black';
-    src: url('/css/fonts/HKGrotesk-Black.otf') format('opentype');
-}
-@font-face {
-    font-family: 'HKGrotesk-SemiBold';
-    src: url('/css/fonts/HKGrotesk-SemiBold.otf') format('opentype');
+@import 'tailwindcss';
+
+@plugin '@tailwindcss/typography';
+@plugin 'tailwindcss-safe-area';
+
+@theme {
+  --breakpoint-*: initial;
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 900px;
+
+  --color-padlok-blue: #344c84;
+  --color-padlok-cyan: #3bbdff;
+
+  --color-skintone-0: #fcbc37;
+  --color-skintone-1: #f5ddc0;
+  --color-skintone-2: #dabc9a;
+  --color-skintone-3: #b8916f;
+  --color-skintone-4: #936644;
+  --color-skintone-5: #56463b;
+
+  --font-hkgrotesk-black: HKGrotesk-Black, sans-serif;
+  --font-hkgrotesk-semibold: HKGrotesk-SemiBold, sans-serif;
 }
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
+
+@layer base {
+  @font-face {
+    font-family: 'HKGrotesk-Black';
+    src: url('/css/fonts/HKGrotesk-Black.otf') format('opentype');
+  }
+  @font-face {
+    font-family: 'HKGrotesk-SemiBold';
+    src: url('/css/fonts/HKGrotesk-SemiBold.otf') format('opentype');
+  }
+}
 
 /* Re-usable */
 
@@ -47,7 +88,7 @@ header {
     @apply z-50 sticky top-0 bg-padlok-blue text-white overflow-hidden h-16 print:text-black print:bg-transparent;
 }
 header > div {
-    @apply centered-container flex justify-between items-center h-16;
+    @apply container px-safe mx-auto flex justify-between items-center h-16;
 }
 header img {
     @apply select-none;
@@ -96,4 +137,28 @@ footer ul.social-media a svg, footer ul.social-media a img {
 }
 footer img.icon {
     @apply w-16 sm:w-24 rounded-2xl sm:rounded-3xl select-none;
+}
+
+.lds-ellipsis div {
+    @apply bg-padlok-cyan;
+}
+
+dl {
+    @apply overflow-visible flex flex-row flex-wrap
+}
+
+dl dt, dl dd {
+    @apply overflow-hidden text-ellipsis grow-0 shrink-0 pb-3 mb-3 border-b-2
+}
+
+dl dt {
+    @apply font-medium text-gray-500 basis-1/3
+}
+
+dl dd {
+    @apply text-right ml-auto basis-2/3
+}
+
+dl dd.full-width {
+    @apply basis-full text-center border-0
 }
