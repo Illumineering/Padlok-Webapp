@@ -1,6 +1,7 @@
 {
   "name": "padlok-share",
   "type": "module",
+  "packageManager": "yarn@4.12.0",
   "version": "0.0.0",
   "scripts": {
     "test": "standard",
@@ -15,8 +16,8 @@
     "vue-meta": "^3.0.0-alpha.10"
   },
   "devDependencies": {
-    "@tailwindcss/vite": "^4.0.14",
     "@tailwindcss/typography": "^0.5.4",
+    "@tailwindcss/vite": "^4.0.14",
     "@vitejs/plugin-vue": "^5.0.0",
     "postcss": "^8.4.6",
     "standard": "*",
