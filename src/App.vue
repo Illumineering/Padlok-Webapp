@@ -4,6 +4,7 @@ import FooterView from './components/FooterView.vue'
 import HeaderView from './components/HeaderView.vue'
 import LoadingIndicator from './components/LoadingIndicator.vue'
 import NotFoundMessage from './components/NotFoundMessage.vue'
+import { resolve } from './share'
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useMeta } from 'vue-meta'
@@ -24,8 +25,6 @@ useMeta({
   ]
 })
 
-const api = 'https://api.padlok.app'
-
 // Main data
 const data = ref({ loading: true, address: null, error: false, reason: null })
 
@@ -40,79 +39,10 @@ const catcher = function (reason) {
   }, 1000)
 }
 
-const components = window.location.pathname.split('/').filter((el) => el !== '')
-let identifier, passphrase
-
-// Get passphrase from uri fragment
-if (components.length === 1 && window.location.hash) {
-  [identifier] = components
-  passphrase = window.location.hash.substring(1)
-}
-
-// Legacy links management
-if (components.length === 2) {
-  [identifier, passphrase] = components
-}
-
-if (!identifier || !passphrase) {
-  catcher('Wrong route')
-} else {
-  // Perform the fetch
-  fetch(api + '/shared/' + identifier)
-    .then(function (res) {
-      res.json()
-        .then(function (json) {
-          if (json.error) {
-            catcher(json.reason)
-            return
-          }
-          const salt = Uint8Array.from(atob(json.salt), c => c.charCodeAt(0))
-          const sealed = Uint8Array.from(atob(json.sealed), c => c.charCodeAt(0))
-          const iterations = json.iterations
-          if (!salt || !sealed || !iterations) {
-            catcher('Could not decode base64 for salt or sealed')
-            return
-          }
-          const nonce = sealed.slice(0, 16)
-          const ciphertext = sealed.slice(16)
-
-          const enc = new TextEncoder()
-          crypto.subtle.importKey('raw', enc.encode(passphrase), 'PBKDF2', false, ['deriveBits', 'deriveKey'])
-            .then(function (keyMaterial) {
-              const keyInfo = {
-                name: 'PBKDF2',
-                salt,
-                iterations,
-                hash: 'SHA-256'
-              }
-              const keyOutput = {
-                name: 'AES-GCM',
-                length: 256
-              }
-              crypto.subtle.deriveKey(keyInfo, keyMaterial, keyOutput, true, ['encrypt', 'decrypt'])
-                .then(function (key) {
-                  const aes = {
-                    name: 'AES-GCM',
-                    iv: nonce
-                  }
-                  crypto.subtle.decrypt(aes, key, ciphertext)
-                    .then(function (decrypted) {
-                      const decoder = new TextDecoder()
-                      do {
-                        // Try to jsonify. If it doesn't, remove last character and try again
-                        try {
-                          data.value = { loading: false, address: JSON.parse(decoder.decode(decrypted)), error: false, reason: null }
-                          break
-                        } catch {
-                          decrypted = decrypted.slice(0, decrypted.byteLength - 1)
-                        }
-                      } while (decrypted.byteLength)
-                    }).catch(catcher)
-                }).catch(catcher)
-            }).catch(catcher)
-        }).catch(catcher)
-    }).catch(catcher)
-}
+resolve(window.location.pathname, window.location.hash)
+  .then(function (address) {
+    data.value = { loading: false, address, error: false, reason: null }
+  }).catch(catcher)
 </script>
 
 <template>
