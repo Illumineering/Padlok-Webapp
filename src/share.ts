@@ -1,5 +1,9 @@
 // Turning a share URL into an address.
 //
+// Two formats arrive here and both end in the same `SharedAddress`. A share link is a
+// pointer: it has to be fetched and decrypted before the page knows anything. An offline
+// code carries the address in its own fragment, so it needs neither.
+//
 // This lives apart from the view for one reason: it can be tested without a browser. The
 // location arrives as two arguments rather than being read off `window`, and every step
 // returns a promise instead of writing to a ref, so a test can hand it a URL and a stubbed
@@ -81,6 +85,15 @@ export interface ShareLink {
   passphrase: string
 }
 
+/** What a share URL turned out to be. */
+export type ShareTarget =
+  /** A pointer to an address. Still has to be fetched and decrypted. */
+  | { kind: 'link', link: ShareLink }
+  /** The address itself, in the fragment. Nothing left to fetch. */
+  | { kind: 'offline', payload: string }
+  /** An offline code in a format newer than this page understands. */
+  | { kind: 'unsupported' }
+
 // MARK: - Reading the URL
 
 /**
@@ -116,6 +129,118 @@ export const parseLocation = function (pathname: string, hash: string): ShareLin
     return null
   }
   return { identifier, passphrase }
+}
+
+/**
+ * Which of the two formats a URL is, or null when it is neither.
+ *
+ * ```
+ * https://share.padlok.app/<identifier>#<passphrase>     a link
+ * https://share.padlok.app/<identifier>/<passphrase>     a link, legacy
+ * https://share.padlok.app/#v1=<payload>                 an offline code
+ * ```
+ *
+ * The fragment decides and the path is never consulted, which is how the app tells the two
+ * apart as well. That is unambiguous rather than merely convenient: a passphrase can never
+ * begin with `v1=`, because the app strips every '=' out of the base64 noise it generates
+ * secrets from — so no passphrase contains one at all.
+ */
+export const parseURL = function (pathname: string, hash: string): ShareTarget | null {
+  const fragment = hash.startsWith('#') ? hash.substring(1) : hash
+
+  if (fragment.startsWith(offlinePrefix)) {
+    return { kind: 'offline', payload: fragment.substring(offlinePrefix.length) }
+  }
+  // A format from a newer app. Reported rather than swallowed as a bad route, which is the
+  // only reason the prefix carries a number at all.
+  if (/^v\d+=/.test(fragment)) {
+    return { kind: 'unsupported' }
+  }
+
+  const link = parseLocation(pathname, hash)
+  return link ? { kind: 'link', link } : null
+}
+
+// MARK: - Offline codes
+//
+// The address itself, carried in the code rather than pointed at by it:
+//
+//   https://share.padlok.app/#v1=<base64url(deflate(JSON))>
+//
+// Nothing was uploaded, so there is nothing to fetch and nothing to decrypt. The payload
+// rides in the fragment for the same reason a passphrase does — a fragment never leaves the
+// device, so door codes stay out of the server's logs.
+//
+// `v1` names the format rather than a versioning scheme. The same wire format is written by
+// the app's `SharedBuilding.qrCodeURL` and read by the App Clip's `Address(qrCodeURL:)`,
+// each pinned to a golden vector; this is the third implementation of it.
+
+const offlinePrefix = 'v1='
+
+/**
+ * base64url to bytes, with the padding the sender strips put back.
+ *
+ * '=' comes off on the way out because it reads as a query separator to anything that
+ * mishandles a fragment. Putting it back is belt-and-braces here and known to be so: `atob`
+ * implements WHATWG forgiving-base64, which accepts an unpadded string outright and rejects
+ * only a length of 4n+1, which no amount of padding would rescue. It is restored anyway
+ * because the two Swift implementations of this format genuinely need it — Foundation's
+ * `Data(base64Encoded:)` is strict — and a decoder swapped in here later may be strict too.
+ */
+const bytesFromBase64URL = function (payload: string): Uint8Array<ArrayBuffer> {
+  const base64 = payload.replaceAll('-', '+').replaceAll('_', '/')
+  const padding = '='.repeat((4 - base64.length % 4) % 4)
+  return Uint8Array.from(atob(base64 + padding), c => c.charCodeAt(0))
+}
+
+/**
+ * Raw DEFLATE, inflated.
+ *
+ * Apple's `NSData.compressed(using: .zlib)` writes RFC 1951 with no zlib wrapper, whatever
+ * its name suggests, so 'deflate-raw' is the format that matches it — plain 'deflate'
+ * rejects the very same bytes for a bad header.
+ *
+ * The stream is drained by hand rather than through `new Response(stream).text()`. Both work
+ * wherever `DecompressionStream` exists, and this one asks less of the browser on a page
+ * whose whole job is to show someone a door code.
+ */
+const inflate = async function (bytes: Uint8Array<ArrayBuffer>): Promise<string> {
+  const stream: ReadableStream<Uint8Array> = new Blob([bytes]).stream()
+    .pipeThrough(new DecompressionStream('deflate-raw'))
+  const reader = stream.getReader()
+  const chunks: Uint8Array[] = []
+  let length = 0
+  for (;;) {
+    const { done, value } = await reader.read()
+    if (done) {
+      break
+    }
+    chunks.push(value)
+    length += value.length
+  }
+  const inflated = new Uint8Array(length)
+  let offset = 0
+  for (const chunk of chunks) {
+    inflated.set(chunk, offset)
+    offset += chunk.length
+  }
+  return new TextDecoder().decode(inflated)
+}
+
+/**
+ * The address an offline code carries.
+ *
+ * What comes out is the same shape a share link yields once decrypted, so it renders through
+ * exactly the same view.
+ */
+export const offlineAddress = async function (payload: string): Promise<SharedAddress> {
+  if (!payload) {
+    throw new Error('Empty offline payload')
+  }
+  // Cast at the wire boundary, as in `decrypt` — with the difference that nothing
+  // authenticates an offline code. Whoever draws the QR code chooses what is in it, which is
+  // as true of a code on a wall as it is of a link someone sends.
+  return JSON.parse(await inflate(bytesFromBase64URL(payload))) as SharedAddress
 }
 
 // MARK: - Fetching
@@ -199,11 +324,18 @@ const unpadded = function (decrypted: ArrayBuffer): string {
 
 // MARK: - The whole journey
 
-/** The address a share URL points at: parsed, fetched, then decrypted. */
+/** The address a share URL leads to, whichever of the two formats it is. */
 export const resolve = async function (pathname: string, hash: string, fetcher: Fetcher = fetch): Promise<SharedAddress> {
-  const link = parseLocation(pathname, hash)
-  if (!link) {
+  const target = parseURL(pathname, hash)
+  if (!target) {
     throw new Error('Wrong route')
   }
-  return decrypt(await shared(link.identifier, fetcher), link.passphrase)
+  switch (target.kind) {
+    case 'offline':
+      return offlineAddress(target.payload)
+    case 'unsupported':
+      throw new Error('Unsupported offline code format')
+    case 'link':
+      return decrypt(await shared(target.link.identifier, fetcher), target.link.passphrase)
+  }
 }

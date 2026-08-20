@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { decrypt, parseLocation, resolve, shared } from './share'
+import { decrypt, offlineAddress, parseLocation, parseURL, resolve, shared } from './share'
 import type { EncryptedPayload, Fetcher } from './share'
 
 // MARK: - The golden vectors
@@ -33,6 +33,20 @@ const padded13 = 'nx4tPEtaaXiHlqW0w9Lh8PUggFwQ3QxM0rr/v9GuCx6VVutI4QaStYvXDyBdl4
 const notJson = 'nx4tPEtaaXiHlqW0w9Lh8OBtnRgfwBdLlLLu7ZL4RSmCh5Ok5dEcN8NhAWKBOHPo'
 
 const payload = (sealed: string): EncryptedPayload => ({ iterations, salt, sealed })
+
+// MARK: - The offline golden vector
+//
+// Byte for byte the string pinned in the app's `ModelsTests/QRCodeTests.swift` and the App
+// Clip's `AddressPullingTests/Pull+Offline+Tests.swift`. The format is written once per
+// module stack over there and once more here, so this vector is what holds all three
+// together: if any of them drifts, one of the three suites fails before a real code stops
+// opening.
+const offlineGolden = [
+  'TZBNa4QwEIb_SphzFL_N7k1XLYVSykJPpYdoRhtwFZJIyy7-9062Pewpk5d53ifkBlrh4vSo',
+  '0cARilPa5VXSBnGdNUHWllVw6EQUJFV-KptDG9dpBxykUgatJSBOmNmQKWSzZG9S_3BW5lGU0Gy05awzchmQkGFdjdKLdEjYDWbptNsU',
+  'wjEToSiEEAWHeV2m_zQJ0zTODuXOod_0TOREtoqKFBVRxYfv6HH2ZT6ic9-9xtP0rDSrYOcPS8Nm3Xrxk3Xmr-5JGjkhPHB1XpQC9k8O',
+  'enFoBg9A836uXhtSWye1GaS9b9J9nO_i1E_SUfiCo6P8shp8XsbVf9CZVMx96wE5c1_I-u16RcO0ZaMkRwj7Lw'
+].join('')
 
 // A fetch that answers with `json`, and records what it was asked for.
 const stubFetch = function (json: unknown): Fetcher & ReturnType<typeof vi.fn> {
@@ -199,5 +213,140 @@ describe('resolve', () => {
     await expect(resolve('/', '', fetcher)).rejects.toThrow('Wrong route')
 
     expect(fetcher).not.toHaveBeenCalled()
+  })
+})
+
+describe('parseURL', () => {
+  it('reads an offline code from the fragment', () => {
+    expect(parseURL('/', '#v1=' + offlineGolden))
+      .toEqual({ kind: 'offline', payload: offlineGolden })
+  })
+
+  it('still sees a link as a link', () => {
+    expect(parseURL('/addressidentifier', '#addresskey'))
+      .toEqual({ kind: 'link', link: { identifier: 'addressidentifier', passphrase: 'addresskey' } })
+    expect(parseURL('/addressidentifier/addresskey', ''))
+      .toEqual({ kind: 'link', link: { identifier: 'addressidentifier', passphrase: 'addresskey' } })
+  })
+
+  it.each(['v2=', 'v3=', 'v10='])('reports %s as a format it does not know', (prefix) => {
+    expect(parseURL('/', '#' + prefix + offlineGolden)).toEqual({ kind: 'unsupported' })
+  })
+
+  it('takes the prefix as decisive, whatever the path says', () => {
+    // The app does the same, and a passphrase cannot collide with the prefix: no generated
+    // secret contains '=' at all, so none can begin with `v1=`.
+    expect(parseURL('/addressidentifier', '#v1=' + offlineGolden))
+      .toEqual({ kind: 'offline', payload: offlineGolden })
+  })
+
+  it('is not fooled by a passphrase that merely starts with a v', () => {
+    expect(parseURL('/addressidentifier', '#v1andthensome'))
+      .toEqual({ kind: 'link', link: { identifier: 'addressidentifier', passphrase: 'v1andthensome' } })
+  })
+
+  it.each([
+    ['the site root', '/', ''],
+    ['an identifier with no passphrase', '/addressidentifier', ''],
+    ['a passphrase with no identifier', '/', '#addresskey']
+  ])('is neither format: %s', (_label, pathname, hash) => {
+    expect(parseURL(pathname, hash)).toBeNull()
+  })
+})
+
+describe('offlineAddress', () => {
+  it('reads the whole address out of the golden vector', async () => {
+    const address = await offlineAddress(offlineGolden)
+
+    expect(address.identifier).toBe('6C3F5A2E-1B4D-4E7A-9F80-2A5C7D9E1B3F')
+    expect(address.address).toBe('12 rue de la Paix, 75002 Paris, France')
+    expect(address.coordinates).toEqual({ latitude: 48.868886, longitude: 2.331497 })
+    expect(address.building).toBe('A')
+    expect(address.intercom).toBe('DURAND')
+    expect(address.staircase).toBe('B')
+    expect(address.floor).toBe(3)
+    expect(address.flat).toBe('Left')
+    expect(address.moreInfos).toBe('Ring twice, the buzzer is faint.')
+    expect(address.doors).toEqual([
+      { label: { door: {} }, code: '1234A' },
+      { label: { custom: { string: 'Garage' } }, code: 'B5678' }
+    ])
+  })
+
+  it('yields the same shape a share link does, so one view renders both', async () => {
+    const fromCode = await offlineAddress(offlineGolden)
+    const fromLink = await decrypt(payload(padded13), passphrase)
+
+    // The two vectors describe the same address by different routes, which is the property
+    // that lets `AddressView` stay unaware of where its data came from.
+    expect(Object.keys(fromCode).sort()).toEqual(Object.keys(fromLink).sort())
+    expect(fromCode).toEqual(fromLink)
+  })
+
+  it('reads a payload that arrives without its base64 padding', async () => {
+    // Which every real one does — the sender strips '='. This asserts the outcome and not
+    // the mechanism: `atob` is forgiving-base64 and would accept the vector even if the
+    // module stopped restoring the padding, so nothing here can pin that step. See
+    // `bytesFromBase64URL`.
+    expect(offlineGolden).toHaveLength(366)
+    expect(offlineGolden.length % 4).toBe(2)
+    await expect(offlineAddress(offlineGolden)).resolves.toBeTruthy()
+  })
+
+  it('refuses a payload of a length no padding could make valid', async () => {
+    // 4n+1 characters: the one case forgiving-base64 rejects outright.
+    await expect(offlineAddress(offlineGolden.slice(0, 361))).rejects.toThrow()
+  })
+
+  it('refuses an empty payload', async () => {
+    await expect(offlineAddress('')).rejects.toThrow('Empty offline payload')
+  })
+
+  it('refuses a payload that is not base64url', async () => {
+    await expect(offlineAddress('!!!!')).rejects.toThrow()
+  })
+
+  it('refuses base64 of something that was never deflated', async () => {
+    // 'hello world', which decodes cleanly and then has no deflate stream in it.
+    await expect(offlineAddress('aGVsbG8gd29ybGQ')).rejects.toThrow()
+  })
+
+  it('refuses a truncated payload', async () => {
+    // A partial scan, or a code someone cut short. The inflate has to fail rather than hand
+    // back whatever it managed to read.
+    await expect(offlineAddress(offlineGolden.slice(0, -40))).rejects.toThrow()
+  })
+
+  it('refuses a payload that inflates to something that is not JSON', async () => {
+    // deflate-raw of the bytes 'not json at all' — it decodes and inflates perfectly, and
+    // only then turns out to be nothing we can use.
+    await expect(offlineAddress('y8svUcgqzs9TSCxRSMzJAQA')).rejects.toThrow()
+  })
+})
+
+describe('resolve, for an offline code', () => {
+  it('returns the address without touching the network', async () => {
+    const fetcher = stubFetch(payload(padded5))
+    const address = await resolve('/', '#v1=' + offlineGolden, fetcher)
+
+    expect(address.address).toBe('12 rue de la Paix, 75002 Paris, France')
+    // The whole point of the format: nothing was uploaded, so there is nothing to ask for.
+    expect(fetcher).not.toHaveBeenCalled()
+  })
+
+  it('reports a format from a newer app rather than calling it a bad route', async () => {
+    const fetcher = stubFetch(payload(padded5))
+    await expect(resolve('/', '#v2=' + offlineGolden, fetcher))
+      .rejects.toThrow('Unsupported offline code format')
+
+    expect(fetcher).not.toHaveBeenCalled()
+  })
+
+  it('still resolves a share link through the network', async () => {
+    const fetcher = stubFetch(payload(padded5))
+    const address = await resolve('/addressidentifier', '#' + passphrase, fetcher)
+
+    expect(fetcher).toHaveBeenCalledWith('https://api.padlok.app/shared/addressidentifier')
+    expect(address.moreInfos).toBe('Ring twice, the buzzer is faint.!!!!!!!!')
   })
 })
