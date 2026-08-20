@@ -43,6 +43,14 @@ resolve(window.location.pathname, window.location.hash)
   .then(function (address) {
     data.value = { loading: false, address, error: false, reason: null }
   }).catch(catcher)
+
+// A fragment-only navigation does not reload the document, and nothing above re-runs by
+// itself — so the page would go on showing the address it resolved for the URL before. What
+// identifies an address to this page lives in the fragment, which is what makes that stale
+// rather than merely unhelpful: the codes on screen would be another address's.
+window.addEventListener('hashchange', function () {
+  window.location.reload()
+})
 </script>
 
 <template>
