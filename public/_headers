@@ -1,0 +1,3 @@
+# Cloudflare Pages has no extension to infer a type from here, and Apple wants JSON.
+/.well-known/apple-app-site-association
+  Content-Type: application/json
