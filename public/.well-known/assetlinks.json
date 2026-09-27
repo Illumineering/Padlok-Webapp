@@ -1,0 +1,10 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "fr.thomasdurand.padlok.debug",
+      "sha256_cert_fingerprints": ["EE:4A:BF:F8:C7:EC:48:5C:14:95:D2:BA:47:4F:10:AA:5E:5B:2C:C8:F0:7D:FD:5D:A9:5A:A0:D5:6D:B3:28:DD"]
+    }
+  }
+]

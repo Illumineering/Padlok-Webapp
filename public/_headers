@@ -1,3 +1,7 @@
 # Cloudflare Pages has no extension to infer a type from here, and Apple wants JSON.
 /.well-known/apple-app-site-association
   Content-Type: application/json
+
+# Android App Links. Pages would infer JSON from the extension; pinned anyway, like the AASA.
+/.well-known/assetlinks.json
+  Content-Type: application/json
