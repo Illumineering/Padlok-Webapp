@@ -1,5 +1,7 @@
 <script setup>
+import { computed } from 'vue'
 import CodeView from './CodeView.vue'
+import { hasFloor, segments, telURL } from '../info'
 
 // Numeral & i18n for localized floor ordinal formatting
 import numeral from 'numeral'
@@ -13,6 +15,9 @@ numeral.locale(locale.value)
 const props = defineProps({
   address: Object
 })
+
+const phoneURL = computed(() => props.address.phoneNumber && telURL(props.address.phoneNumber))
+const moreInfos = computed(() => segments(props.address.moreInfos ?? ''))
 </script>
 
 <template>
@@ -42,16 +47,24 @@ const props = defineProps({
       <dt>{{ $t('address.staircase') }}</dt>
       <dd>{{ address.staircase }}</dd>
     </template>
-    <template v-if="address.floor">
+    <template v-if="hasFloor(address.floor)">
       <dt>{{ $t('address.floor') }}</dt>
-      <dd>{{ numeral(props.address.floor).format('0o') }}</dd>
+      <dd v-if="address.floor === 0">{{ $t('address.groundFloor') }}</dd>
+      <dd v-else>{{ numeral(address.floor).format('0o') }}</dd>
     </template>
     <template v-if="address.flat">
       <dt>{{ $t('address.flat') }}</dt>
       <dd>{{ address.flat }}</dd>
     </template>
+    <template v-if="address.phoneNumber">
+      <dt>{{ $t('address.phoneNumber') }}</dt>
+      <dd>
+        <a v-if="phoneURL" :href="phoneURL">{{ address.phoneNumber }}</a>
+        <template v-else>{{ address.phoneNumber }}</template>
+      </dd>
+    </template>
     <template v-if="address.moreInfos">
-      <dd class="full-width">{{ address.moreInfos }}</dd>
+      <dd class="full-width text-sm whitespace-pre-line break-words"><template v-for="(segment, index) in moreInfos" :key="index"><a v-if="segment.href" :href="segment.href" target="_blank" rel="noopener noreferrer">{{ segment.text }}</a><template v-else>{{ segment.text }}</template></template></dd>
     </template>
   </dl>
 </template>

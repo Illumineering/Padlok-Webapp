@@ -10,6 +10,7 @@ export const translations = {
       building: 'Building',
       flat: 'Flat',
       floor: 'Floor',
+      groundFloor: 'Ground floor',
       intercom: 'Intercom',
       label: {
         door: 'Door',
@@ -17,6 +18,7 @@ export const translations = {
         portal: 'Portal',
         padlock: 'Padlock'
       },
+      phoneNumber: 'Phone number',
       staircase: 'Staircase'
     },
     appstore: {
@@ -65,6 +67,7 @@ export const translations = {
       building: 'Bâtiment',
       flat: 'Appartement',
       floor: 'Étage',
+      groundFloor: 'Rez-de-chaussée',
       intercom: 'Interphone',
       label: {
         door: 'Porte',
@@ -72,6 +75,7 @@ export const translations = {
         portal: 'Portail',
         padlock: 'Cadenas'
       },
+      phoneNumber: 'Téléphone',
       staircase: 'Escalier'
     },
     appstore: {

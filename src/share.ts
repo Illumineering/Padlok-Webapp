@@ -45,8 +45,14 @@ export interface SharedAddress {
   building?: string
   intercom?: string
   staircase?: string
+  /** -1 means none: the app shares the floor as it stores it. 0 is the ground floor. */
   floor?: number
   flat?: string
+  /**
+   * As the sender typed it, never reformatted. Shared since October 2026, so older links and
+   * codes go without it even when the address has one.
+   */
+  phoneNumber?: string
   moreInfos?: string
   /**
    * Rendered as a heading above the street when present. No version of the app sends it —
