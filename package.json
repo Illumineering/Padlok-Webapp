@@ -4,12 +4,13 @@
   "packageManager": "yarn@4.18.1",
   "version": "0.0.0",
   "scripts": {
-    "test": "standard && tsc --noEmit && vitest run",
+    "test": "eslint . && tsc --noEmit && vitest run",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint ."
   },
   "dependencies": {
     "numeral": "^2.0.6",
@@ -21,13 +22,16 @@
     "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "^4.0.14",
     "@vitejs/plugin-vue": "^6.0.3",
+    "eslint": "^10.13.0",
+    "eslint-plugin-vue": "^10.12.0",
+    "neostandard": "^0.14.1",
     "postcss": "^8.5.32",
-    "standard": "*",
     "tailwindcss": "^4.0.14",
     "tailwindcss-safe-area": "^1.3.0",
     "typescript": "~5.9",
     "vite": "^7.3.7",
-    "vitest": "^5.0.3"
+    "vitest": "^5.0.3",
+    "vue-eslint-parser": "^10.4.1"
   },
   "resolutions": {
     "postcss-selector-parser": "^6.1.5"
