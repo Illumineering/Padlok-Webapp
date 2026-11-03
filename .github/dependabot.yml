@@ -1,0 +1,15 @@
+# Security updates only, grouped into a single pull request.
+# open-pull-requests-limit: 0 turns off routine version updates; it does not
+# limit security updates.
+version: 2
+updates:
+  - package-ecosystem: npm # also covers Yarn
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 0
+    groups:
+      security:
+        applies-to: security-updates
+        patterns:
+          - "*"
