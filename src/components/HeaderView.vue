@@ -22,7 +22,7 @@ if (html.classList) html.classList.add.apply(html.classList, classNames);
             </li>
             <li class="hidden-ios">
                 <a :href="$t('url.marketing') + '#android'" rel="external" target="_blank">
-                    <img :src="$t('playstore.lightImage')" :alt="$t('playstore.alternative')">
+                    <img :src="$t('playstore.badge')" :alt="$t('playstore.alternative')">
                 </a>
             </li>
         </ul>

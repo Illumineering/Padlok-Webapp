@@ -4,10 +4,15 @@ import { translations, detectLanguage } from './translations.js'
 import App from './App.vue'
 import './assets/tailwind.css'
 
+const locale = detectLanguage()
+document.documentElement.lang = locale
 const i18n = createI18n({
   legacy: false,
-  locale: detectLanguage() || 'en',
+  locale,
   fallbackLocale: 'en',
+  // Languages leave out on purpose what English already says for all of them.
+  fallbackWarn: false,
+  missingWarn: false,
   messages: translations
 })
 const app = createApp(App)

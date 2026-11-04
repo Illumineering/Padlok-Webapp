@@ -2,15 +2,10 @@
 import { computed } from 'vue'
 import CodeView from './CodeView.vue'
 import { hasFloor, segments, telURL } from '../info'
-
-// Numeral & i18n for localized floor ordinal formatting
-import numeral from 'numeral'
-// All supported locales must be imported
-import 'numeral/locales/fr'
+import { ordinal } from '../ordinal'
 import { useI18n } from 'vue-i18n'
 
 const { locale } = useI18n({ useScope: 'global' })
-numeral.locale(locale.value)
 
 const props = defineProps({
   address: Object
@@ -50,7 +45,7 @@ const moreInfos = computed(() => segments(props.address.moreInfos ?? ''))
     <template v-if="hasFloor(address.floor)">
       <dt>{{ $t('address.floor') }}</dt>
       <dd v-if="address.floor === 0">{{ $t('address.groundFloor') }}</dd>
-      <dd v-else>{{ numeral(address.floor).format('0o') }}</dd>
+      <dd v-else>{{ ordinal(address.floor, locale) }}</dd>
     </template>
     <template v-if="address.flat">
       <dt>{{ $t('address.flat') }}</dt>
