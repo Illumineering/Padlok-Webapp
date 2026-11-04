@@ -7,23 +7,11 @@ import NotFoundMessage from './components/NotFoundMessage.vue'
 import { resolve } from './share'
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useMeta } from 'vue-meta'
 
 const { t } = useI18n({ useScope: 'global' })
-const title = t('head.title')
-const description = t('head.description')
-
-useMeta({
-  title,
-  meta: [
-    { itemprop: 'name', content: title },
-    { property: 'og:title', content: title },
-    { itemprop: 'description', content: description },
-    { property: 'og:description', content: description },
-    { name: 'description', content: description },
-    { name: 'twitter:description', content: description }
-  ]
-})
+// Only the browser tab benefits from this: link previews read index.html without running
+// any script, so the meta tags there stay static and in English.
+document.title = t('head.title')
 
 // Main data
 const data = ref({ loading: true, address: null, error: false, reason: null })
@@ -54,9 +42,6 @@ window.addEventListener('hashchange', function () {
 </script>
 
 <template>
-  <metainfo>
-    <template v-slot:title="{ content }">{{ content }}</template>
-  </metainfo>
   <HeaderView></HeaderView>
   <main class="container mx-auto px-8 my-6 grow prose relative">
     <template v-if="loading">

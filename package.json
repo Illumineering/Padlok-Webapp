@@ -15,8 +15,7 @@
   "dependencies": {
     "numeral": "^2.0.6",
     "vue": "^3.5.42",
-    "vue-i18n": "^11.4.14",
-    "vue-meta": "^3.0.0-alpha.10"
+    "vue-i18n": "^11.4.14"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.20",

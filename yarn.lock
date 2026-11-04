@@ -2623,7 +2623,6 @@ __metadata:
     vue: "npm:^3.5.42"
     vue-eslint-parser: "npm:^10.4.1"
     vue-i18n: "npm:^11.4.14"
-    vue-meta: "npm:^3.0.0-alpha.10"
   languageName: unknown
   linkType: soft
 
@@ -3254,15 +3253,6 @@ __metadata:
   peerDependencies:
     vue: ^3.0.0
   checksum: 10c0/c60d98a010d02a7dd440ae5f60fbb6896e2e58f1231d3f09989df8fa05daa3e30c977d45be16ba3a57868772c6c02fcb2520e53c4397e3b7bf8c6bae2a910429
-  languageName: node
-  linkType: hard
-
-"vue-meta@npm:^3.0.0-alpha.10":
-  version: 3.0.0-alpha.10
-  resolution: "vue-meta@npm:3.0.0-alpha.10"
-  peerDependencies:
-    vue: ^3.0.0
-  checksum: 10c0/b519f125a4358148559dd248fe4a58be733e41f7e14b0aac626b921cb949092e1ab7f28a8e48735611790718a28af0eb51546a6e3db5602f5599d6782040e3d7
   languageName: node
   linkType: hard
 
