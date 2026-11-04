@@ -34,6 +34,7 @@
     "vue-eslint-parser": "^10.4.1"
   },
   "resolutions": {
-    "postcss-selector-parser": "^6.1.5"
+    "postcss-selector-parser": "^6.1.5",
+    "cacache/glob": "^14.0.3"
   }
 }
